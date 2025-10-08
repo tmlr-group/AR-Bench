@@ -25,11 +25,12 @@
 <a id="features"></a>
 ## ✨ Features
 
-- **Three Diverse Task Families**: Detective cases, situation puzzles, and guessing numbers
-- **Comprehensive Reasoning Assessment**: Tests commonsense, logical, and symbolic reasoning
-- **Real-world Simulation**: Agentic scenarios requiring information acquisition
-- **Flexible Model Support**: Compatible with both remote APIs and local models
-- **Extensible Framework**: Easy to add new tasks and evaluation methods
+| Feature Category | Supported Capabilities|
+| - | - |
+| **AR-Bench Tasks**        | Detective Cases<br>Situation Puzzles<br> Guessing Numbers<br>
+| **Inference Support**             | VLLM-driven local models<br>API Inference |
+| **Reasoning Methods**        | Zero-Shot<br>Few-Shot<br>Few-Shot with Instruction<br>Tree of Thoughts<br>Proactive CoT<br>Uncertainty of thoughts<br>|
+|
 
 <a id="installation"></a>
 ## 🚀 Installation
