@@ -30,7 +30,6 @@
 | **AR-Bench Tasks**        | Detective Cases<br>Situation Puzzles<br> Guessing Numbers<br>
 | **Inference Support**             | VLLM-driven local models<br>API Inference |
 | **Reasoning Methods**        | Zero-Shot<br>Few-Shot<br>Few-Shot with Instruction<br>Tree of Thoughts<br>Proactive CoT<br>Uncertainty of thoughts<br>|
-|
 
 <a id="installation"></a>
 ## 🚀 Installation
