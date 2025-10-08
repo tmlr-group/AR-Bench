@@ -211,10 +211,11 @@ python3 -m arbench.reasoner.gn.gn_evaluator \
 | Parameter | Description | Default |
 |-----------|-------------|---------|
 | `--method` | Reasoning method (zero_shot, few_shot, etc.) | - |
-| `--branch` | Number of reasoning branches | 3 |
+| `--branch` | Number of reasoning branches in ToT | 3 |
 | `--max_turn` | Maximum interaction turns | 25 |
 | `--temperature` | Sampling temperature | 0.7 |
 | `--top_p` | Nucleus sampling parameter | 0.7 |
+| `--simulate_depth` | The rounds of simulation for estimate the quality of questions in UoT | 1 |
 
 <a id="examples"></a>
 ## 📋 Examples

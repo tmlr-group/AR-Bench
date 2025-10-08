@@ -99,29 +99,12 @@ eval_prompt = """
 {diff_pos} digits are present in the answer but in the different positions 
 """
 
-# # 一般用于讨论的prompt
-# discuss_prompt = """
-# Now you can discuss the number with other players, provide the clue of this number you think is important to other detectives.
-# """
-
-# # 用于提议答案的prompt
-# propose_number_prompt = """
-# Now you can discuss what the number is you think to other players and provide the reason.
-# """
-
-# # 反馈给agent的信息
-# discuss_share_message = """
-# Other players give you this information:
-# {information}
-# """
-
 
 refine_prompt = """
 Your output does not follow this format: Guess: [number]
 please propose a guess number, for example: Guess: 1234
 """
 
-# 游戏规则
 Game_rule = """"
 Let's play a game of guessing number 
 The game rule is: I have a 4-digit secret number in mind, all digits of the number is unique such that all digits from 0 to 9 can only be present once. For example: 0123 or 9468. 
@@ -132,7 +115,6 @@ For example: 0 digits are present in the answer and in the correct positions 2 d
 
 """
 
-# 任务 猜数字
 Guess_number_prompt = """ 
 Your task is: Based on the game rules and the previous guess records, suggest 3 possible four-digit numbers, which means you have 3 chances to make your guesses. You do not need to start the game or perform any other actions, just provide 3 numbers.
 
@@ -142,9 +124,91 @@ Your output should be in this format (only in this format and must include exact
 Guess: [num1], [num2], [num3]
 """
 
-# 最终猜测
 Final_prompt = """
 Now, you have to base on the known information is the guess record {guess_record}, to guess a 4-digit number as your answer
 
 Your output should be only a 4-digit number without any other words.
 """
+
+
+proactive_cot_system_prompt = """Let's play a game of guessing number 
+The game rule is: I have a 4-digit secret number in mind, all digits of the number is unique such that all digits from 0 to 9 can only be present once. For example: 0123 or 9468. You will take turns guessing the number and using feedbacks to progressively reveal the true number. The game will conduct 25 turns:
+In the game when a guessing number is proposed, I will return the feedback of two information: 
+1. How many digits are present in the answer and in the correct position 
+2. How many digits are present in the answer but in the different position from the guessing number 
+For example: 0 digits are present in the answer and in the correct positions, 2 digits are present in the answer but in the different positions 
+
+Game start:
+"""
+
+proactive_cot_prompt_template = """Given the game rules and the conversation history so far, you need to determine the most effective next guess. 
+
+First, analyze the current progress of the guessing game by examining the previous guesses and feedback:
+{history}
+
+There are several possible action strategies for guessing numbers:
+1. DIGIT_EXPLORATION: Test new digits not used in previous guesses to determine which digits are in the secret number
+2. POSITION_TESTING: Test known digits in different positions to determine their correct positions
+3. ELIMINATION: Make a guess that will eliminate certain possibilities based on previous feedback
+4. CONFIRMATION: Make a guess to confirm hypotheses about specific digits or positions
+5. OPTIMAL_SOLUTION: Make a guess that you believe has a high probability of being the correct answer
+6. INFORMATION_GAIN: Make a guess that will provide the maximum information gain regardless of correctness probability
+
+To make an optimal next guess, first analyze:
+- Which digits are confirmed to be in the secret number
+- Which digits are confirmed not to be in the secret number
+- Which positions are known for certain digits
+- Which positions are eliminated for certain digits
+- What information would be most valuable to learn next
+
+Your analysis of the current game state:
+[Provide your detailed analysis here]
+
+Based on this analysis, select the most appropriate action strategies for this turn:
+[Select one or more of the action strategies listed above]
+
+Justification for selected action strategies:
+[Explain why these strategies are optimal for the current game state]
+
+Based on the selected strategies, your next guess is: [4-digit number]
+
+Justification for this guess:
+[Explain how this guess implements the selected strategies and what information you expect to gain]
+
+note that when you propose a guess, you should output 'Guess: [4-digit number]'"""
+
+
+SYSTEMPROMPT = """Let's play a game of guessing number 
+The game rule is: I have a 4-digit secret number in mind, all digits of the number is unique such that all digits from 0 to 9 can only be present once. For example: 0123 or 9468. You will take turns guessing the number and using feedbacks to progressively reveal the true number. The game will conduct {turn} turns:
+In the game when a guessing number is proposed, I will return the feedback of two information: 
+1. How many digits are present in the answer and in the correct position 
+2. How many digits are present in the answer but in the different position from the guessing number 
+For example: 0 digits are present in the answer and in the correct positions, 2 digits are present in the answer but in the different positions 
+
+Game start:
+"""
+
+MULTI_GUESS_PROMPT = """Next, please generate 3 different possible guesses that would give you the most information. Make sure all your guesses are 4-digit numbers with unique digits:"""
+
+MULTI_GUESS_PROMPT_WITH_ANSWERS = """Next, please generate 3 different possible guesses that would give you the most information. Make sure all your guesses are 4-digit numbers with unique digits.
+
+Here are all the possible answers remaining:
+{answer_set}
+
+Please analyze these possible answers and choose 3 guesses that would help eliminate the most possibilities:"""
+
+SIMULATE_PROMPT = """For these 3 guesses, let's analyze how much information each guess would provide.
+Guess 1: {guess1}
+Guess 2: {guess2}
+Guess 3: {guess3}
+
+For each guess, estimate how much the answer space would reduce with different feedbacks (correct position, correct digit but wrong position).
+Format your answer as:
+Guess 1: {guess1} - [analysis of information gain]
+Guess 2: {guess2} - [analysis of information gain]
+Guess 3: {guess3} - [analysis of information gain]
+Best guess: [your choice of the most informative guess and why]"""
+
+CONCLUSIONPROMPT = "Based on the previous guessing history, give your final guess:"
+
+FEEDBACKPROMPT = "Turn {turn}: Guess: {guess}. Feedback: {in_pos} digits are present in the answer and in the correct positions, {out_pos} digits are present in the answer but in the different positions."

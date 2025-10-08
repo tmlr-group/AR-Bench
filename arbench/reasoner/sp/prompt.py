@@ -363,3 +363,118 @@ Now, based on previous information, give your answer of this puzzle directly:
 your answer format:
 A: [Your answer]
 """
+
+proactive_cot_system_prompt = """Let's play a situation puzzle game. I'll give you a puzzle. You need to uncover the truth by asking yes-or-no questions.
+In each turn, you ask me a yes-or-no question, and I will answer you "Yes", "No" or "Unknown".
+You should keep asking me questions to gather enough information to solve the puzzle.
+
+Note that, you should only ask yes-or-no questions.
+"""
+
+proactive_cot_system_prompt_final_guess = """Let's play a situation puzzle game. I'll give you a puzzle. You need to recover the truth of the puzzle based on the given QA records.
+"""
+
+proactive_cot_question_prompt_template = """Puzzle: {puzzle}
+
+Previous Questions and Answers:
+{history}
+
+Current turn: {turn}/{max_turn}
+
+There are several possible action strategies for solving this situation puzzle:
+1. FACT_GATHERING: Ask about basic facts of the situation to establish the foundation
+2. TIMELINE_EXPLORATION: Ask about the sequence of events to understand what happened
+3. CHARACTER_INVESTIGATION: Ask about the people involved, their relationships, and motivations
+4. LOCATION_PROBING: Ask about the setting and environmental factors
+5. CAUSE_EFFECT_ANALYSIS: Ask about causality and consequences
+6. HYPOTHESIS_TESTING: Ask a question to test a specific hypothesis you've formed
+7. CONSTRAINT_CLARIFICATION: Ask about limitations or rules that might apply to the situation
+8. ANOMALY_INQUIRY: Focus on unusual or unexpected elements of the puzzle
+
+To make the most of your remaining questions, first analyze:
+- What key facts have been established so far
+- What information is still missing or unclear
+- What hypotheses you've formed based on the evidence
+- What inconsistencies or contradictions need to be resolved
+- What would provide the most valuable information for solving the puzzle
+
+Your analysis of the current puzzle state:
+[Provide your detailed analysis here]
+
+Based on this analysis, select the most appropriate action strategy for this turn:
+[Select one of the action strategies listed above]
+
+Justification for selected action strategy:
+[Explain why this strategy is optimal for the current puzzle state]
+
+Based on the selected strategy, your next question is:
+Q: [Your carefully crafted yes-or-no question]
+
+Justification for this question:
+[Explain how this question implements the selected strategy and what information you expect to gain]"""
+
+
+uot_initial_answer_set_prompt = """Given this situation puzzle:
+{puzzle}
+
+Please generate a list of possible explanations for what happened. Each explanation should be a complete story that explains all the given facts.
+Format each explanation as a numbered list item.
+
+For example:
+1. [First possible explanation]
+2. [Second possible explanation]
+...etc.
+
+Generate at least 5 different plausible explanations."""
+
+uot_candidate_questions_prompt = """Given this situation puzzle:
+{puzzle}
+
+Previous Q&A record:
+{qa_record}
+
+Current possible explanations:
+{answer_set}
+
+Generate 3 yes-or-no questions that would help eliminate the most possibilities from the current answer set.
+Each question should be designed to split the current explanations into roughly equal groups (yes vs no).
+Format your response as:
+Q1: [First question]
+Q2: [Second question]
+Q3: [Third question]"""
+
+uot_answer_set_reduction_prompt = """Given this situation puzzle:
+{puzzle}
+
+Current possible explanations:
+{answer_set}
+
+For the question: {question}
+
+Estimate how many explanations would remain valid for each possible answer (Yes/No-Unknown).
+Note: No and Unknown are treated as the same answer since they have similar effects.
+Format your response as:
+Yes: [number]
+No-Unknown: [number]"""
+
+uot_update_answer_set_prompt = """Given this situation puzzle:
+{puzzle}
+
+Current possible explanations:
+{answer_set}
+
+For the question: {question}
+The answer is: {answer}
+
+Which explanations remain valid? List only the numbers of valid explanations.
+Format your response as a comma-separated list of numbers."""
+
+uot_final_answer_prompt = """Let's play a situation puzzle game. I'll give you a puzzle. You need to recover the truth of the puzzle based on the given QA records.
+
+Puzzle: {puzzle}
+
+QA Record:
+{qa_record}
+
+Your should directly give your answer without any other explanation.
+The answer:"""

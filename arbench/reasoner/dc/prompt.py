@@ -255,3 +255,97 @@ question_propose_prompt_searching = """
 Here is the record of your questions and answers(if exist):{record}
 Now give your question to {suspect}.
 You can only propose one **single** question, form like: 'did you any financial difficulties or debts that you were struggling to pay off and if so did you have any discussions with your brother about your financial situation' is forbidden"""
+
+
+proactive_cot_system_prompt = """You will take on the role of a detective tasked with finding the real murderer in this case. Your goal is to solve the mystery by questioning the suspects."""
+
+proactive_cot_system_prompt_conclusion = """You will take on the role of a detective tasked with finding the real murderer in this case.
+You need to answer who is the true murderer based on the given initial information and the interrgation record."""
+
+proactive_cot_select_suspect_template = """Case Background:
+{init_info}
+
+Previous Questions and Answers:
+{history}
+
+Current turn: {turn}/{max_turn}
+
+Available suspects to question: {suspect_list}
+
+There are several possible strategies for solving this task:
+1. GATHER INFORMATION: Collect basic facts and details from the suspect
+2. FOLLOW UP: Dig deeper into areas where suspects seem uncomfortable
+3. CROSS-REFERENCE: Compare information between different suspects
+
+Based on your analysis of this case, which strategy is the best? please reasoning step by step.
+
+Selected suspect: """
+
+proactive_cot_question_template = """Case Background:
+{init_info}
+
+Previous Questions and Answers:
+{history}
+
+Current turn: {turn}/{max_turn}
+
+You have selected to question: {selected_suspect}
+
+There are several possible strategies for solving this task:
+1. GATHER INFORMATION: Collect basic facts and details from the suspect
+2. FOLLOW UP: Dig deeper into areas where suspects seem uncomfortable
+3. CROSS-REFERENCE: Compare information between different suspects
+
+Based on your analysis of this case, which strategy is the best? please reasoning step by step.
+
+Selected strategy: [Choose one of the strategies listed above]
+
+Based on this strategy, formulate a specific question for {selected_suspect}:
+
+Question: """
+
+
+uot_generate_questions_template = """Given this case:
+{init_info}
+
+Previous Q&A record:
+{qa_record}
+{current_suspects}
+
+Generate exactly 3 questions that would help identify the murderer.
+Each question should be designed to eliminate as many suspects as possible.
+You can ask questions to any of the suspects.
+Format your response as:
+Q1: Question for [SUSPECT NAME]: [QUESTION]
+Q2: Question for [SUSPECT NAME]: [QUESTION]
+Q3: Question for [SUSPECT NAME]: [QUESTION]"""
+
+uot_update_answer_set_template = """Given this case:
+{init_info}
+
+Current possible suspects:
+{answer_set}
+
+For the question: {question}
+The feedback is: {feedback}
+
+Which suspects remain as potential murderers? List only the numbers of valid suspects.
+Format your response as a comma-separated list of numbers."""
+
+uot_conclusion_template = """You will take on the role of a detective tasked with finding the real murderer in this case.
+You need to answer who is the true murderer based on the given initial information and the interrgation record.
+The case background is:
+{init_info}
+
+The interrogate record to these suspects:
+{qa_record}
+
+Now, based on your obtained information, you should tell me who is more likely to be the true murderer, {choice}
+You should only output the index of the candidate suspect like: A , B, C, D or E.
+you should strictly follow this answer format:
+Reason: [Your inference step by step]
+Answer: [A, B, C, D or E]
+
+Now give me your answer.
+Reason:
+Answer:"""
