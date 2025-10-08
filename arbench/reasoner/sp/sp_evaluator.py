@@ -900,9 +900,11 @@ def _run_uot_evaluation(
     policy_top_p: float,
     response_temperature: float,
     response_top_p: float,
-    simulate_depth: int = 3,
+    simulate_depth: int = 1,
 ) -> None:
     """Run the UoT (Uncertainty of Thought) evaluation."""
+
+    print(f"Start uot evaluation, simulate_depth={simulate_depth}")
     for i in tqdm(range(len(logs), len(dataset))):
         puzzle = dataset[i]['surface']
         true_answer = dataset[i]['bottom']
@@ -971,7 +973,7 @@ def _run_uot_evaluation(
                 policy_model, puzzle, best_question, answer, answer_set, 0.1, 0.9,
                 POLICY_API_KEY, POLICY_BASE_URL
             )
-            print(f"Current answer set size: {len(answer_set)}")
+            print(f"Turn {turn + 1}/{max_turn}, Current answer set size: {len(answer_set)}")
             total_input_token += input_token
             total_output_token += output_token
             

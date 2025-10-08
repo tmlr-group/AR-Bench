@@ -978,6 +978,7 @@ def _run_uot_evaluation(
     response_top_p: float,
     simulate_depth: int,
 ) -> None:
+    print(f"Start uot evaluation, simulate_depth={simulate_depth}")
     for i in tqdm(range(len(logs), len(dataset))):
         init_info = convert_initial_info_to_string(dataset[i]["initial_information"])
         label = dataset[i]["label"]
@@ -1057,7 +1058,7 @@ def _run_uot_evaluation(
             answer_set, ui, uo = _uot_update_answer_set(policy_model, init_info, best_q, feedback, answer_set, policy_temperature, policy_top_p)
             total_input_token += ui
             total_output_token += uo
-            print(f"Current answer set size: {len(answer_set)}")
+            print(f"Turn {turn + 1}/{max_turn}, Current answer set size: {len(answer_set)}")
             if len(answer_set) <= 1:
                 break
 
